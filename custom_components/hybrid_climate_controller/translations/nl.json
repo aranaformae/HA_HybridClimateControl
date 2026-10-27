@@ -2,20 +2,46 @@
   "config": {
     "step": {
       "user": {
-        "title": "Hybride woonkamer",
+        "title": "Hybrid Climate — simulation",
+        "description": "Dry Run uses measured temperature. Virtual uses adjustable scenario inputs. Physical control is disabled.",
         "data": {
           "name": "Naam",
-          "room_sensor": "Kamertemperatuur (sensor of climate-entiteit)",
-          "ac_climate": "Daikin airco",
-          "plugwise_climate": "Plugwise woonkamer",
-          "floor_pump": "Vloerverwarmingspomp",
-          "bathroom_climate": "Badkamerzone (alleen ter informatie)",
-          "assist_delta": "CV ondersteuning vanaf temperatuurtekort (°C)",
-          "minimum_on_minutes": "Minimale pomplooptijd (min)",
-          "minimum_off_minutes": "Minimale pomp-uit tijd (min)",
-          "pump_postrun_minutes": "Gewenste pompnalooptijd (min; handmatige beveiliging vereist)"
+          "room_sensor": "Kamertemperatuur (sensor of climate, Celsius)",
+          "ac_climate": "Daikin (alleen uitlezen in deze versie)",
+          "plugwise_climate": "Plugwise woonkamerzone",
+          "floor_pump": "Pomp (alleen ter informatie)",
+          "bathroom_climate": "Onafhankelijke badkamerzone (nooit aangestuurd)",
+          "test_mode": "Testmodus",
+          "assist_delta": "CV-ondersteuning vanaf temperatuurtekort (°C)"
         }
       }
+    },
+    "error": {
+      "overlapping_zones": "Kies aparte airco-, woonkamer- en badkamerzones."
+    },
+    "abort": {
+      "already_configured": "This zone is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Hybrid Climate — simulation",
+        "description": "Dry Run uses measured temperature. Virtual uses adjustable scenario inputs. Physical control is disabled.",
+        "data": {
+          "name": "Naam",
+          "room_sensor": "Kamertemperatuur (sensor of climate, Celsius)",
+          "ac_climate": "Daikin (alleen uitlezen in deze versie)",
+          "plugwise_climate": "Plugwise woonkamerzone",
+          "floor_pump": "Pomp (alleen ter informatie)",
+          "bathroom_climate": "Onafhankelijke badkamerzone (nooit aangestuurd)",
+          "test_mode": "Testmodus",
+          "assist_delta": "CV-ondersteuning vanaf temperatuurtekort (°C)"
+        }
+      }
+    },
+    "error": {
+      "overlapping_zones": "Kies aparte airco-, woonkamer- en badkamerzones."
     }
   }
 }
