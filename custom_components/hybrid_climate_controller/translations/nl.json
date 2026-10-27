@@ -5,7 +5,7 @@
         "title": "Hybride woonkamer",
         "data": {
           "name": "Naam",
-          "room_sensor": "Externe temperatuursensor woonkamer",
+          "room_sensor": "Kamertemperatuur (sensor of climate-entiteit)",
           "ac_climate": "Daikin airco",
           "plugwise_climate": "Plugwise woonkamer",
           "floor_pump": "Vloerverwarmingspomp",
