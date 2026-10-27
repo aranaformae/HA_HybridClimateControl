@@ -44,9 +44,12 @@ class HybridClimate(ClimateEntity, RestoreEntity):
         self._busy = False
         self._unsubs = []
         self._error = None
+        self._simulated_commands = []
 
     @property
     def current_temperature(self):
+        if self.cfg.get(CONF_SIM_TEMP) is not None and self.cfg.get(CONF_SIMULATION, True):
+            return float(self.cfg[CONF_SIM_TEMP])
         state = self.hass.states.get(self.cfg[CONF_ROOM])
         try:
             raw = state.attributes.get("current_temperature") if state and state.domain == "climate" else (state.state if state else None)
@@ -60,7 +63,7 @@ class HybridClimate(ClimateEntity, RestoreEntity):
         return {"active_source": self._source, "floor_heat_requested": self._floor_requested,
                 "plugwise_zone": self.cfg[CONF_PLUGWISE], "pump": self.cfg[CONF_PUMP],
                 "bathroom_zone_untouched": self.cfg.get(CONF_BATHROOM),
-                "error": self._error, "strategy": "ac_first_plugwise_assist", "pump_control": "integration" if self.cfg.get(CONF_PUMP_MANAGED, False) else "plugwise_external"}
+                "error": self._error, "simulation_mode": self.cfg.get(CONF_SIMULATION, True), "virtual_temperature": self.cfg.get(CONF_SIM_TEMP), "simulated_commands": self._simulated_commands[-8:], "strategy": "ac_first_plugwise_assist", "pump_control": "integration" if self.cfg.get(CONF_PUMP_MANAGED, False) else "plugwise_external"}
 
     async def async_added_to_hass(self):
         await super().async_added_to_hass()
@@ -113,6 +116,8 @@ class HybridClimate(ClimateEntity, RestoreEntity):
     def _fresh_temperature(self):
         state = self.hass.states.get(self.cfg[CONF_ROOM])
         temp = self.current_temperature
+        if self.cfg.get(CONF_SIMULATION, True) and self.cfg.get(CONF_SIM_TEMP) is not None:
+            return temp
         if temp is None or state is None or (dt_util.utcnow() - state.last_updated).total_seconds() > 1200:
             return None
         return temp
@@ -120,6 +125,13 @@ class HybridClimate(ClimateEntity, RestoreEntity):
     def _valid(self, entity):
         state = self.hass.states.get(entity)
         return state if state is not None and state.state not in ("unavailable", "unknown") else None
+
+    async def _command(self, domain, service, data):
+        if self.cfg.get(CONF_SIMULATION, True):
+            self._simulated_commands.append({"domain": domain, "service": service, **data})
+            self._simulated_commands = self._simulated_commands[-8:]
+            return
+        await self.hass.services.async_call(domain, service, data, blocking=True)
 
     async def _set_climate_target(self, entity, target, *, force=False, kind="plugwise"):
         state = self._valid(entity)
@@ -131,7 +143,7 @@ class HybridClimate(ClimateEntity, RestoreEntity):
             return
         if not force and monotonic() - last < 300:
             return
-        await self.hass.services.async_call("climate", "set_temperature", {"entity_id": entity, "temperature": target}, blocking=True)
+        await self._command("climate", "set_temperature", {"entity_id": entity, "temperature": target})
         if kind == "plugwise":
             self._last_plugwise_change = monotonic()
         else:
@@ -146,7 +158,7 @@ class HybridClimate(ClimateEntity, RestoreEntity):
         if state.state != desired:
             if enable and monotonic() - self._last_ac_change < 300:
                 return
-            await self.hass.services.async_call("climate", "set_hvac_mode", {"entity_id": entity, "hvac_mode": desired}, blocking=True)
+            await self._command("climate", "set_hvac_mode", {"entity_id": entity, "hvac_mode": desired})
             self._last_ac_change = monotonic()
         if enable:
             await self._set_climate_target(entity, target, kind="ac")
@@ -163,7 +175,7 @@ class HybridClimate(ClimateEntity, RestoreEntity):
         limit = 60 * self.cfg[CONF_MIN_ON if current else CONF_MIN_OFF]
         if not force and elapsed < limit:
             return
-        await self.hass.services.async_call("switch", "turn_on" if enable else "turn_off", {"entity_id": entity}, blocking=True)
+        await self._command("switch", "turn_on" if enable else "turn_off", {"entity_id": entity})
         self._last_pump_change = monotonic()
 
     async def _control(self):
@@ -171,6 +183,7 @@ class HybridClimate(ClimateEntity, RestoreEntity):
             return
         self._busy = True
         try:
+            self._simulated_commands = []
             temp = self._fresh_temperature()
             if self._attr_hvac_mode == HVACMode.OFF or temp is None:
                 # Never switch off pump automatically on stale sensor: boiler may still
@@ -194,7 +207,7 @@ class HybridClimate(ClimateEntity, RestoreEntity):
             # Start pump before asking boiler for heat.
             if want_floor and self.cfg.get(CONF_PUMP_MANAGED, False):
                 await self._set_pump(True)
-                if self._valid(self.cfg[CONF_PUMP]).state != "on":
+                if not self.cfg.get(CONF_SIMULATION, True) and self._valid(self.cfg[CONF_PUMP]).state != "on":
                     want_floor = False
                     plugwise_target = round(max(5.0, temp - 3.0) * 2) / 2
             await self._set_climate_target(self.cfg[CONF_PLUGWISE], plugwise_target)
