@@ -2,8 +2,8 @@
   "config": {
     "step": {
       "user": {
-        "title": "Hybrid Climate — simulation",
-        "description": "Dry Run uses measured temperature. Virtual uses adjustable scenario inputs. Physical control is disabled.",
+        "title": "Hybride klimaatregeling — simulatie",
+        "description": "Dry Run gebruikt de gemeten kamertemperatuur. Virtual gebruikt instelbare scenariowaarden. Fysieke aansturing is uitgeschakeld.",
         "data": {
           "name": "Naam",
           "room_sensor": "Kamertemperatuur (sensor of climate, Celsius)",
@@ -20,14 +20,14 @@
       "overlapping_zones": "Kies aparte airco-, woonkamer- en badkamerzones."
     },
     "abort": {
-      "already_configured": "This zone is already configured."
+      "already_configured": "Deze zone is al geconfigureerd."
     }
   },
   "options": {
     "step": {
       "init": {
-        "title": "Hybrid Climate — simulation",
-        "description": "Dry Run uses measured temperature. Virtual uses adjustable scenario inputs. Physical control is disabled.",
+        "title": "Hybride klimaatregeling — simulatie",
+        "description": "Dry Run gebruikt de gemeten kamertemperatuur. Virtual gebruikt instelbare scenariowaarden. Fysieke aansturing is uitgeschakeld.",
         "data": {
           "name": "Naam",
           "room_sensor": "Kamertemperatuur (sensor of climate, Celsius)",

@@ -58,3 +58,15 @@ Official references:
 - https://developers.home-assistant.io/docs/config_entries_index/
 - https://developers.home-assistant.io/docs/config_entries_options_flow_handler/
 - https://developers.home-assistant.io/docs/core/entity/climate/
+
+## First GitHub CI feedback
+
+Hassfest rejected alphabetic-only manifest sorting; corrected to `domain`, `name`,
+then alphabetical keys. HACS validates the integration manifest and hacs.json, but
+rejects missing repository description and topics. These are repository settings,
+not source-file fields; the available connector cannot edit them. Configure the
+repository About description (for example, “Simulation-first Home Assistant hybrid
+heat-pump and Plugwise heating controller”) and topics such as `home-assistant`,
+`hacs`, `custom-integration`, `heating`, then rerun HACS. The workflow deliberately
+retains those checks rather than suppressing the failures. Stable release remains
+blocked pending green CI and supervised validation.
