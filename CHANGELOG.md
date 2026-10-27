@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0-beta.2 (proposed; simulation-only)
+
+- Configure Frank-compatible all-in electricity/gas tariff sensors and optional future price lists.
+- Validate units, numeric values, freshness and timezone-aware hourly/quarter-hour slots.
+- Add estimated COP/CV efficiency options, heat-cost diagnostics and cheapest-source advice.
+- Include price changes in bounded decision history; keep all physical control disabled.
+- Add tests for tariff parsing, availability, costs, listener updates and no hardware calls.
+
 ## 0.5.0-beta.1 (proposed; not a stable release)
 
 - Restrict all installations to advisory Dry Run / Virtual; old live and managed

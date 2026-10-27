@@ -9,6 +9,7 @@ async def async_get_config_entry_diagnostics(hass, entry):
         "mode": runtime.mode,
         "physical_control_enabled": False,
         "pump_control": "plugwise_external",
+        "energy": runtime.energy,
         "decision": runtime.decision.attributes(),
         "history": list(runtime.history),
         "virtual_inputs": dict(runtime.values) if runtime.mode == "virtual" else None,

@@ -12,7 +12,12 @@
           "floor_pump": "Pump (informational only)",
           "bathroom_climate": "Independent bathroom zone (never controlled)",
           "test_mode": "Test mode",
-          "assist_delta": "CV assistance threshold (°C)"
+          "assist_delta": "CV assistance threshold (°C)",
+          "electricity_price_entity": "Frank current all-in electricity price (EUR/kWh)",
+          "gas_price_entity": "Frank current all-in gas price (EUR/m³)",
+          "future_price_entities": "Optional extra Frank price-list / analysis sensors",
+          "estimated_cop": "Estimated COP (assumption, not measured)",
+          "boiler_efficiency": "Estimated boiler efficiency (0.50–1.00)"
         }
       }
     },
@@ -36,7 +41,12 @@
           "floor_pump": "Pump (informational only)",
           "bathroom_climate": "Independent bathroom zone (never controlled)",
           "test_mode": "Test mode",
-          "assist_delta": "CV assistance threshold (°C)"
+          "assist_delta": "CV assistance threshold (°C)",
+          "electricity_price_entity": "Frank current all-in electricity price (EUR/kWh)",
+          "gas_price_entity": "Frank current all-in gas price (EUR/m³)",
+          "future_price_entities": "Optional extra Frank price-list / analysis sensors",
+          "estimated_cop": "Estimated COP (assumption, not measured)",
+          "boiler_efficiency": "Estimated boiler efficiency (0.50–1.00)"
         }
       }
     },

@@ -12,7 +12,12 @@
           "floor_pump": "Pomp (alleen ter informatie)",
           "bathroom_climate": "Onafhankelijke badkamerzone (nooit aangestuurd)",
           "test_mode": "Testmodus",
-          "assist_delta": "CV-ondersteuning vanaf temperatuurtekort (°C)"
+          "assist_delta": "CV-ondersteuning vanaf temperatuurtekort (°C)",
+          "electricity_price_entity": "Frank actuele all-in stroomprijs (EUR/kWh)",
+          "gas_price_entity": "Frank actuele all-in gasprijs (EUR/m³)",
+          "future_price_entities": "Optionele extra Frank prijslijst-/analysesensoren",
+          "estimated_cop": "Geschatte COP (aanname, niet gemeten)",
+          "boiler_efficiency": "Geschat CV-rendement (0,50–1,00)"
         }
       }
     },
@@ -36,7 +41,12 @@
           "floor_pump": "Pomp (alleen ter informatie)",
           "bathroom_climate": "Onafhankelijke badkamerzone (nooit aangestuurd)",
           "test_mode": "Testmodus",
-          "assist_delta": "CV-ondersteuning vanaf temperatuurtekort (°C)"
+          "assist_delta": "CV-ondersteuning vanaf temperatuurtekort (°C)",
+          "electricity_price_entity": "Frank actuele all-in stroomprijs (EUR/kWh)",
+          "gas_price_entity": "Frank actuele all-in gasprijs (EUR/m³)",
+          "future_price_entities": "Optionele extra Frank prijslijst-/analysesensoren",
+          "estimated_cop": "Geschatte COP (aanname, niet gemeten)",
+          "boiler_efficiency": "Geschat CV-rendement (0,50–1,00)"
         }
       }
     },

@@ -9,6 +9,7 @@ from homeassistant.helpers.event import async_track_state_change_event, async_tr
 from homeassistant.util import dt as dt_util
 
 from .const import CONF_ASSIST, CONF_ROOM, CONF_SIM_TEMP, DOMAIN
+from .energy import PRICE_KEYS, energy_snapshot
 from .engine import decide, finite
 
 # Virtual inputs are scenario inputs, not measured values or learned parameters.
@@ -43,12 +44,28 @@ class SimulationRuntime:
         self.target = 20.0
         self.history = deque(maxlen=50)
         self.decision = decide(None, self.target, False)
+        self.energy = energy_snapshot(hass, self.cfg, self.mode, self.values)
         self.closed = False
         self.unsubs = []
 
     def start(self):
         self.unsubs = [
-            async_track_state_change_event(self.hass, [self.cfg[CONF_ROOM]], self._changed),
+            async_track_state_change_event(
+                self.hass,
+                list(
+                    dict.fromkeys(
+                        filter(
+                            None,
+                            [
+                                self.cfg[CONF_ROOM],
+                                *(self.cfg.get(key) for key in PRICE_KEYS),
+                                *self.cfg.get("future_price_entities", []),
+                            ],
+                        )
+                    )
+                ),
+                self._changed,
+            ),
             async_track_time_interval(self.hass, self._tick, timedelta(minutes=1)),
         ]
 
@@ -120,7 +137,13 @@ class SimulationRuntime:
             self.decision.cv_demand,
             self.cfg.get(CONF_ASSIST, 1.0),
         )
+        self.energy = energy_snapshot(self.hass, self.cfg, self.mode, self.values)
         snapshot = {
+            "energy": {
+                key: value
+                for key, value in self.energy.items()
+                if key != "future_electricity_prices"
+            },
             "mode": self.mode,
             "enabled": self.enabled,
             "room": self.room,

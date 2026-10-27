@@ -5,6 +5,17 @@ from homeassistant.components.sensor import SensorEntity
 from .const import DOMAIN
 from .entity import SimulationEntity
 
+ENERGY_UNITS = {
+    "electricity_price": "EUR/kWh",
+    "gas_price": "EUR/m³",
+    "airco_heat_cost": "EUR/kWh",
+    "cv_heat_cost": "EUR/kWh",
+    "cheapest_heat_source": None,
+    "tariff_status": None,
+    "future_electricity_prices": None,
+    "estimated_cop": None,
+}
+
 FIELDS = {
     "active_source": ("source", None),
     "decision_reason": ("reason", None),
@@ -23,6 +34,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
             DiagnosticSensor(runtime, key)
             for key in [
                 *FIELDS,
+                *ENERGY_UNITS,
                 "room",
                 "decision_log",
                 "simulation_mode",
@@ -39,6 +51,10 @@ class DiagnosticSensor(SimulationEntity, SensorEntity):
         super().__init__(runtime, key)
         self.key = key
         self._attr_native_unit_of_measurement = FIELDS.get(key, (None, None))[1]
+        if key in ENERGY_UNITS:
+            self._attr_native_unit_of_measurement = ENERGY_UNITS[key]
+            if ENERGY_UNITS[key] is not None:
+                self._attr_suggested_display_precision = 3
         if key == "room":
             self._attr_native_unit_of_measurement = "°C"
         elif key == "temperature_trend":
@@ -49,6 +65,9 @@ class DiagnosticSensor(SimulationEntity, SensorEntity):
     @property
     def native_value(self):
         r = self.runtime
+        if self.key in ENERGY_UNITS:
+            value = r.energy[self.key]
+            return len(value) if self.key == "future_electricity_prices" else value
         if self.key in FIELDS:
             value = getattr(r.decision, FIELDS[self.key][0])
             return ("on" if value else "off") if isinstance(value, bool) else value
@@ -64,6 +83,18 @@ class DiagnosticSensor(SimulationEntity, SensorEntity):
 
     @property
     def extra_state_attributes(self):
+        if self.key in ENERGY_UNITS:
+            return {
+                "origin": self.runtime.energy["origin"],
+                "used_for_control": False,
+                "cop_is_estimate": True,
+                "boiler_efficiency": self.runtime.energy["boiler_efficiency"],
+                **(
+                    {"prices": self.runtime.energy["future_electricity_prices"]}
+                    if self.key == "future_electricity_prices"
+                    else {}
+                ),
+            }
         if self.key == "decision_log":
             return {"entries": list(self.runtime.history), "maximum_entries": 50}
         return {

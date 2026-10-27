@@ -39,7 +39,18 @@ async def test_options_and_overlap(hass):
     )
     assert result["errors"] == {"base": "overlapping_zones"}
     result = await hass.config_entries.options.async_configure(
-        result["flow_id"], {**DATA, "assist_delta": 2.0}
+        result["flow_id"],
+        {
+            **DATA,
+            "assist_delta": 2.0,
+            "electricity_price_entity": "sensor.frank",
+            "gas_price_entity": "sensor.frank_gas",
+            "estimated_cop": 4.0,
+            "boiler_efficiency": 0.85,
+        },
     )
     assert result["type"] == FlowResultType.CREATE_ENTRY
     assert entry.options["assist_delta"] == 2.0
+
+    assert entry.options["electricity_price_entity"] == "sensor.frank"
+    assert entry.options["estimated_cop"] == 4.0

@@ -28,6 +28,26 @@ def schema(defaults):
             vol.Optional(
                 CONF_BATHROOM, description={"suggested_value": defaults.get(CONF_BATHROOM)}
             ): climate,
+            vol.Optional(
+                "electricity_price_entity",
+                description={"suggested_value": defaults.get("electricity_price_entity")},
+            ): selector.EntitySelector(selector.EntitySelectorConfig(domain="sensor")),
+            vol.Optional(
+                "gas_price_entity",
+                description={"suggested_value": defaults.get("gas_price_entity")},
+            ): selector.EntitySelector(selector.EntitySelectorConfig(domain="sensor")),
+            vol.Optional(
+                "future_price_entities",
+                description={"suggested_value": defaults.get("future_price_entities", [])},
+            ): selector.EntitySelector(
+                selector.EntitySelectorConfig(domain="sensor", multiple=True)
+            ),
+            vol.Required("estimated_cop", default=defaults.get("estimated_cop", 3.0)): vol.All(
+                vol.Coerce(float), vol.Range(min=1, max=8)
+            ),
+            vol.Required(
+                "boiler_efficiency", default=defaults.get("boiler_efficiency", 0.9)
+            ): vol.All(vol.Coerce(float), vol.Range(min=0.5, max=1)),
             vol.Required("test_mode", default=defaults.get("test_mode", "dry_run")): vol.In(
                 ["dry_run", "virtual"]
             ),
