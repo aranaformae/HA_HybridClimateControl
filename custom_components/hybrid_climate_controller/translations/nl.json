@@ -2,20 +2,56 @@
   "config": {
     "step": {
       "user": {
-        "title": "Hybride woonkamer",
+        "title": "Hybride klimaatregeling — simulatie",
+        "description": "Dry Run gebruikt de gemeten kamertemperatuur. Virtual gebruikt instelbare scenariowaarden. Fysieke aansturing is uitgeschakeld.",
         "data": {
           "name": "Naam",
-          "room_sensor": "Kamertemperatuur (sensor of climate-entiteit)",
-          "ac_climate": "Daikin airco",
-          "plugwise_climate": "Plugwise woonkamer",
-          "floor_pump": "Vloerverwarmingspomp",
-          "bathroom_climate": "Badkamerzone (alleen ter informatie)",
-          "assist_delta": "CV ondersteuning vanaf temperatuurtekort (°C)",
-          "minimum_on_minutes": "Minimale pomplooptijd (min)",
-          "minimum_off_minutes": "Minimale pomp-uit tijd (min)",
-          "pump_postrun_minutes": "Gewenste pompnalooptijd (min; handmatige beveiliging vereist)"
+          "room_sensor": "Kamertemperatuur (sensor of climate, Celsius)",
+          "ac_climate": "Daikin (alleen uitlezen in deze versie)",
+          "plugwise_climate": "Plugwise woonkamerzone",
+          "floor_pump": "Pomp (alleen ter informatie)",
+          "bathroom_climate": "Onafhankelijke badkamerzone (nooit aangestuurd)",
+          "test_mode": "Testmodus",
+          "assist_delta": "CV-ondersteuning vanaf temperatuurtekort (°C)",
+          "electricity_price_entity": "Frank actuele all-in stroomprijs (EUR/kWh)",
+          "gas_price_entity": "Frank actuele all-in gasprijs (EUR/m³)",
+          "future_price_entities": "Optionele extra Frank prijslijst-/analysesensoren",
+          "estimated_cop": "Geschatte COP (aanname, niet gemeten)",
+          "boiler_efficiency": "Geschat CV-rendement (0,50–1,00)"
         }
       }
+    },
+    "error": {
+      "overlapping_zones": "Kies aparte airco-, woonkamer- en badkamerzones."
+    },
+    "abort": {
+      "already_configured": "Deze zone is al geconfigureerd."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Hybride klimaatregeling — simulatie",
+        "description": "Dry Run gebruikt de gemeten kamertemperatuur. Virtual gebruikt instelbare scenariowaarden. Fysieke aansturing is uitgeschakeld.",
+        "data": {
+          "name": "Naam",
+          "room_sensor": "Kamertemperatuur (sensor of climate, Celsius)",
+          "ac_climate": "Daikin (alleen uitlezen in deze versie)",
+          "plugwise_climate": "Plugwise woonkamerzone",
+          "floor_pump": "Pomp (alleen ter informatie)",
+          "bathroom_climate": "Onafhankelijke badkamerzone (nooit aangestuurd)",
+          "test_mode": "Testmodus",
+          "assist_delta": "CV-ondersteuning vanaf temperatuurtekort (°C)",
+          "electricity_price_entity": "Frank actuele all-in stroomprijs (EUR/kWh)",
+          "gas_price_entity": "Frank actuele all-in gasprijs (EUR/m³)",
+          "future_price_entities": "Optionele extra Frank prijslijst-/analysesensoren",
+          "estimated_cop": "Geschatte COP (aanname, niet gemeten)",
+          "boiler_efficiency": "Geschat CV-rendement (0,50–1,00)"
+        }
+      }
+    },
+    "error": {
+      "overlapping_zones": "Kies aparte airco-, woonkamer- en badkamerzones."
     }
   }
 }

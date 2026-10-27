@@ -2,22 +2,56 @@
   "config": {
     "step": {
       "user": {
-        "title": "Hybride woonkamer",
+        "title": "Hybrid Climate — simulation",
+        "description": "Dry Run uses measured temperature. Virtual uses adjustable scenario inputs. Physical control is disabled.",
         "data": {
-          "name": "Naam",
-          "room_sensor": "Kamertemperatuur (sensor of climate-entiteit)",
-          "ac_climate": "Daikin airco",
-          "plugwise_climate": "Plugwise woonkamer",
-          "floor_pump": "Vloerverwarmingspomp",
-          "bathroom_climate": "Badkamerzone (alleen ter informatie)",
-          "assist_delta": "CV ondersteuning vanaf temperatuurtekort (°C)",
-          "minimum_on_minutes": "Minimale pomplooptijd (min)",
-          "minimum_off_minutes": "Minimale pomp-uit tijd (min)",
-          "pump_postrun_minutes": "Gewenste pompnalooptijd (min; handmatige beveiliging vereist)",
-          "simulation_mode": "Simulatiemodus (geen apparaatcommando's)",
-          "simulation_temperature": "Virtuele kamertemperatuur (optioneel)"
+          "name": "Name",
+          "room_sensor": "Room temperature (sensor or climate, Celsius)",
+          "ac_climate": "Daikin (read-only in this build)",
+          "plugwise_climate": "Plugwise living-room zone",
+          "floor_pump": "Pump (informational only)",
+          "bathroom_climate": "Independent bathroom zone (never controlled)",
+          "test_mode": "Test mode",
+          "assist_delta": "CV assistance threshold (°C)",
+          "electricity_price_entity": "Frank current all-in electricity price (EUR/kWh)",
+          "gas_price_entity": "Frank current all-in gas price (EUR/m³)",
+          "future_price_entities": "Optional extra Frank price-list / analysis sensors",
+          "estimated_cop": "Estimated COP (assumption, not measured)",
+          "boiler_efficiency": "Estimated boiler efficiency (0.50–1.00)"
         }
       }
+    },
+    "error": {
+      "overlapping_zones": "Select separate airco, living-room and bathroom zones."
+    },
+    "abort": {
+      "already_configured": "This zone is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Hybrid Climate — simulation",
+        "description": "Dry Run uses measured temperature. Virtual uses adjustable scenario inputs. Physical control is disabled.",
+        "data": {
+          "name": "Name",
+          "room_sensor": "Room temperature (sensor or climate, Celsius)",
+          "ac_climate": "Daikin (read-only in this build)",
+          "plugwise_climate": "Plugwise living-room zone",
+          "floor_pump": "Pump (informational only)",
+          "bathroom_climate": "Independent bathroom zone (never controlled)",
+          "test_mode": "Test mode",
+          "assist_delta": "CV assistance threshold (°C)",
+          "electricity_price_entity": "Frank current all-in electricity price (EUR/kWh)",
+          "gas_price_entity": "Frank current all-in gas price (EUR/m³)",
+          "future_price_entities": "Optional extra Frank price-list / analysis sensors",
+          "estimated_cop": "Estimated COP (assumption, not measured)",
+          "boiler_efficiency": "Estimated boiler efficiency (0.50–1.00)"
+        }
+      }
+    },
+    "error": {
+      "overlapping_zones": "Select separate airco, living-room and bathroom zones."
     }
   }
 }
