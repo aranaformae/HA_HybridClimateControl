@@ -49,7 +49,8 @@ class HybridClimate(ClimateEntity, RestoreEntity):
     def current_temperature(self):
         state = self.hass.states.get(self.cfg[CONF_ROOM])
         try:
-            value = float(state.state)
+            raw = state.attributes.get("current_temperature") if state and state.domain == "climate" else (state.state if state else None)
+            value = float(raw)
             return value if -20 <= value <= 60 else None
         except (ValueError, TypeError, AttributeError):
             return None
