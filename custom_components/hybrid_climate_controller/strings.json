@@ -1,0 +1,21 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Hybride woonkamer",
+        "data": {
+          "name": "Naam",
+          "room_sensor": "Externe temperatuursensor woonkamer",
+          "ac_climate": "Daikin airco",
+          "plugwise_climate": "Plugwise woonkamer",
+          "floor_pump": "Vloerverwarmingspomp",
+          "bathroom_climate": "Badkamerzone (alleen ter informatie)",
+          "assist_delta": "CV ondersteuning vanaf temperatuurtekort (°C)",
+          "minimum_on_minutes": "Minimale pomplooptijd (min)",
+          "minimum_off_minutes": "Minimale pomp-uit tijd (min)",
+          "pump_postrun_minutes": "Gewenste pompnalooptijd (min; handmatige beveiliging vereist)"
+        }
+      }
+    }
+  }
+}
