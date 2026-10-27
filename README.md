@@ -1,7 +1,7 @@
 # HA Hybrid Climate Control
 
 Experimental Home Assistant integration for a Daikin air-to-air heat pump and
-Plugwise-controlled boiler/floor heating. **0.5.0-beta.2 is simulation-only.** It
+Plugwise-controlled boiler/floor heating. **0.5.0-beta.3 is simulation-only.** It
 cannot control physical heating, even if an older entry has
 `simulation_mode: false` or `manage_pump: true`.
 
@@ -153,3 +153,18 @@ log entry. Reloading options refreshes tariff listeners.
 
 Source format checked against:
 https://github.com/bajansen/home-assistant-frank_energie/blob/master/custom_components/frank_energie/sensor.py
+
+## Controller device page (beta.3)
+
+The integration is classified as a service, rather than a helper, and explicitly
+registers one logical controller device per config entry. Open Settings → Devices
+& Services → Integrations → Hybrid Climate Controller → the configured controller
+device. Its name matches your configured name. The device shows the model and
+integration version. The thermostat is under Controls, virtual scenario numbers
+and the simulation-mode select under Configuration, and sensors under Diagnostics.
+This logical service device does not represent new physical hardware.
+
+Existing entry and device identifiers are retained. Update through HACS and restart
+Home Assistant; do not remove/recreate the integration. Device registration no
+longer depends on any entity being enabled. Existing names and entity IDs are
+preserved, including user overrides. This change does not enable physical control.
