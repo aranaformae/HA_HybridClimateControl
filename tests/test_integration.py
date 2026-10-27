@@ -147,3 +147,50 @@ async def test_expired_reading(hass, freezer):
     r.evaluate()
     assert r.decision.source == "hybrid"
     await hass.config_entries.async_unload(entry.entry_id)
+
+
+async def test_controller_device_and_entity_groups(hass):
+    from homeassistant.const import EntityCategory
+    from homeassistant.helpers import device_registry as dr
+    from homeassistant.helpers import entity_registry as er
+
+    from custom_components.hybrid_climate_controller.const import VERSION
+
+    entry, r = await setup(hass)
+    devices = dr.async_entries_for_config_entry(dr.async_get(hass), entry.entry_id)
+    assert len(devices) == 1
+    device = devices[0]
+    assert device.identifiers == {(DOMAIN, entry.entry_id)}
+    assert device.entry_type == dr.DeviceEntryType.SERVICE
+    assert device.model == "Hybrid heating controller (simulation)"
+    assert device.sw_version == VERSION
+    assert device.name == "Hybrid"
+    entities = er.async_entries_for_config_entry(er.async_get(hass), entry.entry_id)
+    assert len(entities) == 31
+    assert all(entity.device_id == device.id for entity in entities)
+    for entity in entities:
+        if entity.domain == "climate":
+            assert entity.entity_category is None
+        elif entity.domain in ("number", "select"):
+            assert entity.entity_category == EntityCategory.CONFIG
+        else:
+            assert entity.entity_category == EntityCategory.DIAGNOSTIC
+    assert await hass.config_entries.async_reload(entry.entry_id)
+    await hass.async_block_till_done()
+    devices = dr.async_entries_for_config_entry(dr.async_get(hass), entry.entry_id)
+    assert [item.id for item in devices] == [device.id]
+    assert await hass.config_entries.async_unload(entry.entry_id)
+
+
+async def test_device_with_all_entities_disabled(hass):
+    from homeassistant.helpers import device_registry as dr
+    from homeassistant.helpers import entity_registry as er
+
+    entry, r = await setup(hass)
+    registry = er.async_get(hass)
+    for entity in er.async_entries_for_config_entry(registry, entry.entry_id):
+        registry.async_update_entity(entity.entity_id, disabled_by=er.RegistryEntryDisabler.USER)
+    assert await hass.config_entries.async_reload(entry.entry_id)
+    await hass.async_block_till_done()
+    assert len(dr.async_entries_for_config_entry(dr.async_get(hass), entry.entry_id)) == 1
+    assert await hass.config_entries.async_unload(entry.entry_id)

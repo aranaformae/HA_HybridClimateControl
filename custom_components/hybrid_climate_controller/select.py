@@ -1,6 +1,7 @@
 """Only safe simulation modes are exposed."""
 
 from homeassistant.components.select import SelectEntity
+from homeassistant.const import EntityCategory
 
 from .const import DOMAIN
 from .entity import SimulationEntity
@@ -12,6 +13,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 class SimulationSelect(SimulationEntity, SelectEntity):
     _attr_options = ["dry_run", "virtual"]
+    _attr_entity_category = EntityCategory.CONFIG
 
     def __init__(self, runtime):
         super().__init__(runtime, "simulation_mode")

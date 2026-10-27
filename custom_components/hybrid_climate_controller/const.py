@@ -18,3 +18,5 @@ CONF_PUMP_MANAGED = "manage_pump"
 
 CONF_SIMULATION = "simulation_mode"
 CONF_SIM_TEMP = "simulation_temperature"
+
+VERSION = "0.5.0-beta.3"

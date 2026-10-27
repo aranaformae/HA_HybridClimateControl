@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0-beta.3
+
+- Present the controller as a service integration with one explicitly registered device.
+- Display controller model/version and preserve existing device/entity identifiers.
+- Group virtual input controls as Configuration and status sensors as Diagnostics.
+- Test registry linkage, reload identity and registration with disabled entities.
+
 ## 0.5.0-beta.2 (proposed; simulation-only)
 
 - Configure Frank-compatible all-in electricity/gas tariff sensors and optional future price lists.

@@ -1,8 +1,10 @@
 """Safe simulation entry lifecycle."""
 
 from homeassistant.const import Platform
+from homeassistant.helpers import device_registry as dr
 
 from .const import DOMAIN
+from .entity import controller_device_info
 from .runtime import SimulationRuntime
 
 PLATFORMS = [Platform.CLIMATE, Platform.SENSOR, Platform.NUMBER, Platform.SELECT]
@@ -11,6 +13,12 @@ PLATFORMS = [Platform.CLIMATE, Platform.SENSOR, Platform.NUMBER, Platform.SELECT
 async def async_setup_entry(hass, entry):
     runtime = SimulationRuntime(hass, entry)
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = runtime
+    # Register independently of enabled entities, so a configured controller always
+    # has a visible device page, including when all its entities are disabled.
+    dr.async_get(hass).async_get_or_create(
+        config_entry_id=entry.entry_id,
+        **controller_device_info(entry.entry_id, runtime.cfg),
+    )
     try:
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     except Exception:

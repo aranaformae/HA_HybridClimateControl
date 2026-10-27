@@ -1,6 +1,7 @@
 """Measured and advisory diagnostics, never actuator feedback."""
 
 from homeassistant.components.sensor import SensorEntity
+from homeassistant.const import EntityCategory
 
 from .const import DOMAIN
 from .entity import SimulationEntity
@@ -47,6 +48,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 
 class DiagnosticSensor(SimulationEntity, SensorEntity):
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+
     def __init__(self, runtime, key):
         super().__init__(runtime, key)
         self.key = key

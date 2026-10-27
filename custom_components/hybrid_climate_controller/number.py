@@ -1,6 +1,7 @@
 """Live adjustable virtual scenario inputs; reset safely after reload."""
 
 from homeassistant.components.number import NumberEntity, NumberMode
+from homeassistant.const import EntityCategory
 
 from .const import DOMAIN
 from .entity import SimulationEntity
@@ -14,6 +15,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 class VirtualNumber(SimulationEntity, NumberEntity):
     _attr_mode = NumberMode.BOX
+    _attr_entity_category = EntityCategory.CONFIG
 
     def __init__(self, runtime, key, spec):
         super().__init__(runtime, "virtual_" + key)
