@@ -139,9 +139,9 @@ class HybridClimate(ClimateEntity, RestoreEntity):
             raise RuntimeError(f"Climate unavailable: {entity}")
         current = state.attributes.get("temperature")
         last = self._last_plugwise_change if kind == "plugwise" else self._last_ac_change
-        if current is not None and abs(float(current) - target) < 0.4:
+        if not self.cfg.get(CONF_SIMULATION, True) and current is not None and abs(float(current) - target) < 0.4:
             return
-        if not force and monotonic() - last < 300:
+        if not self.cfg.get(CONF_SIMULATION, True) and not force and monotonic() - last < 300:
             return
         await self._command("climate", "set_temperature", {"entity_id": entity, "temperature": target})
         if kind == "plugwise":
@@ -155,7 +155,7 @@ class HybridClimate(ClimateEntity, RestoreEntity):
         if state is None:
             raise RuntimeError("Airco unavailable")
         desired = HVACMode.HEAT if enable else HVACMode.OFF
-        if state.state != desired:
+        if self.cfg.get(CONF_SIMULATION, True) or state.state != desired:
             if enable and monotonic() - self._last_ac_change < 300:
                 return
             await self._command("climate", "set_hvac_mode", {"entity_id": entity, "hvac_mode": desired})
@@ -169,11 +169,11 @@ class HybridClimate(ClimateEntity, RestoreEntity):
         if state is None or state.state not in ("on", "off"):
             raise RuntimeError("Pump switch unavailable")
         current = state.state == "on"
-        if current == enable:
+        if current == enable and not self.cfg.get(CONF_SIMULATION, True):
             return
         elapsed = monotonic() - self._last_pump_change
         limit = 60 * self.cfg[CONF_MIN_ON if current else CONF_MIN_OFF]
-        if not force and elapsed < limit:
+        if not self.cfg.get(CONF_SIMULATION, True) and not force and elapsed < limit:
             return
         await self._command("switch", "turn_on" if enable else "turn_off", {"entity_id": entity})
         self._last_pump_change = monotonic()
