@@ -19,7 +19,7 @@ class HybridRoomSensor(SensorEntity):
     def native_value(self):
         s = self.hass.states.get(self.entry.data[CONF_ROOM])
         try:
-            return float(s.state) if s else None
+            return float(s.attributes.get("current_temperature") if s and s.domain == "climate" else s.state) if s else None
         except (ValueError, TypeError):
             return None
     @property
