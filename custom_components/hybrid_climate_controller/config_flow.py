@@ -12,7 +12,7 @@ class HybridClimateConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_create_entry(title=user_input[CONF_NAME], data=user_input)
         schema = vol.Schema({
             vol.Required(CONF_NAME, default="Hybride woonkamer"): str,
-            vol.Required(CONF_ROOM): selector.EntitySelector(selector.EntitySelectorConfig(domain="sensor", device_class="temperature")),
+            vol.Required(CONF_ROOM): selector.EntitySelector(selector.EntitySelectorConfig(domain=["sensor", "climate"])),
             vol.Required(CONF_AC, default="climate.daikin_woonkamer_room_temperature"): selector.EntitySelector(selector.EntitySelectorConfig(domain="climate")),
             vol.Required(CONF_PLUGWISE, default="climate.woonkamer"): selector.EntitySelector(selector.EntitySelectorConfig(domain="climate")),
             vol.Required(CONF_PUMP, default="switch.vloerverwarmingspomp"): selector.EntitySelector(selector.EntitySelectorConfig(domain="switch")),
