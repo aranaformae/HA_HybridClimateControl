@@ -15,3 +15,6 @@ DEFAULT_MIN_OFF = 15
 DEFAULT_POSTRUN = 10
 
 CONF_PUMP_MANAGED = "manage_pump"
+
+CONF_SIMULATION = "simulation_mode"
+CONF_SIM_TEMP = "simulation_temperature"
