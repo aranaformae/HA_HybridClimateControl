@@ -1,0 +1,79 @@
+name: Publish 0.5.0-beta.2 prerelease
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/prerelease.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: prerelease-0.5.0-beta.2
+  cancel-in-progress: false
+env:
+  RELEASE_TAG: 0.5.0-beta.2
+  RELEASE_SHA: 3ac3cb76d48cc91b82d2d00face570a2bf79011b
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_SHA }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install -r requirements-test.txt
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: python -m compileall -q custom_components
+      - run: pytest -q
+      - name: Verify release version and prerelease format
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from awesomeversion import AwesomeVersion
+          path = "custom_components/hybrid_climate_controller/manifest.json"
+          version = json.load(open(path))["version"]
+          assert version == os.environ["RELEASE_TAG"]
+          assert AwesomeVersion(version).beta
+          PY
+  hassfest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_SHA }}
+      - uses: home-assistant/actions/hassfest@master
+  hacs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_SHA }}
+      - uses: hacs/action@main
+        with:
+          category: integration
+          ignore: brands
+  publish:
+    needs: [tests, hassfest, hacs]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish validated prerelease (never latest)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release already exists; leaving it unchanged."
+            exit 0
+          fi
+          gh release create "$RELEASE_TAG" \
+            --target "$RELEASE_SHA" \
+            --title "0.5.0-beta.2 — Safe simulation and Frank Energie" \
+            --notes-file docs/releases/0.5.0-beta.2.md \
+            --prerelease \
+            --latest=false
