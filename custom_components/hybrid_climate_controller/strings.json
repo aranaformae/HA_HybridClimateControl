@@ -13,7 +13,9 @@
           "assist_delta": "CV ondersteuning vanaf temperatuurtekort (°C)",
           "minimum_on_minutes": "Minimale pomplooptijd (min)",
           "minimum_off_minutes": "Minimale pomp-uit tijd (min)",
-          "pump_postrun_minutes": "Gewenste pompnalooptijd (min; handmatige beveiliging vereist)"
+          "pump_postrun_minutes": "Gewenste pompnalooptijd (min; handmatige beveiliging vereist)",
+          "simulation_mode": "Simulatiemodus (geen apparaatcommando's)",
+          "simulation_temperature": "Virtuele kamertemperatuur (optioneel)"
         }
       }
     }
