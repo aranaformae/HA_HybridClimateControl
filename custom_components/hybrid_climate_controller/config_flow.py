@@ -4,7 +4,7 @@ from homeassistant.helpers import selector
 from .const import *
 
 class HybridClimateConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    VERSION = 3
+    VERSION = 4
     async def async_step_user(self, user_input=None):
         if user_input is not None:
             await self.async_set_unique_id(user_input[CONF_PLUGWISE] + "_" + user_input[CONF_PUMP])
@@ -17,6 +17,8 @@ class HybridClimateConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             vol.Required(CONF_PLUGWISE, default="climate.woonkamer"): selector.EntitySelector(selector.EntitySelectorConfig(domain="climate")),
             vol.Required(CONF_PUMP, default="switch.vloerverwarmingspomp"): selector.EntitySelector(selector.EntitySelectorConfig(domain="switch")),
             vol.Optional(CONF_PUMP_MANAGED, default=False): bool,
+            vol.Optional(CONF_SIMULATION, default=True): bool,
+            vol.Optional(CONF_SIM_TEMP): vol.All(vol.Coerce(float), vol.Range(min=5, max=35)),
             vol.Optional(CONF_BATHROOM, default="climate.badkamer"): selector.EntitySelector(selector.EntitySelectorConfig(domain="climate")),
             vol.Optional(CONF_ASSIST, default=DEFAULT_ASSIST): vol.All(vol.Coerce(float), vol.Range(min=0.5, max=4)),
             vol.Optional(CONF_MIN_ON, default=DEFAULT_MIN_ON): vol.All(vol.Coerce(int), vol.Range(min=5, max=120)),
